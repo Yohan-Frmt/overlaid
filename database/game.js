@@ -1,32 +1,43 @@
 import mongoose from 'mongoose';
 
 export default mongoose.model(
-  'Tournament',
+  'Game',
   new mongoose.Schema({
-    name: {
+    team1: {
       type: String,
       trim: true,
-      unique: true,
+      unique: false,
       required: true,
       get: ([x, ...y]) => x.toUpperCase() + y.join(''),
     },
-    bracket: {
+    team2: {
+      type: String,
+      trim: true,
+      unique: false,
+      required: true,
+      get: ([x, ...y]) => x.toUpperCase() + y.join(''),
+    },
+    map: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Map',
+    },
+    scoreE1: {
       type: String,
       trim: true,
       unique: false,
       required: false,
     },
-    twitter: {
+    scoreE2: {
       type: String,
       trim: true,
       unique: false,
       required: false,
     },
-    logo: {
+    number: {
       type: String,
       trim: true,
       unique: false,
-      required: false,
+      required: true,
     },
   }),
 );

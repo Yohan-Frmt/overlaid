@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export default mongoose.model(
-  'Tournament',
+  'Map',
   new mongoose.Schema({
     name: {
       type: String,
@@ -10,23 +10,11 @@ export default mongoose.model(
       required: true,
       get: ([x, ...y]) => x.toUpperCase() + y.join(''),
     },
-    bracket: {
+    image: {
       type: String,
       trim: true,
-      unique: false,
-      required: false,
-    },
-    twitter: {
-      type: String,
-      trim: true,
-      unique: false,
-      required: false,
-    },
-    logo: {
-      type: String,
-      trim: true,
-      unique: false,
-      required: false,
+      unique: true,
+      required: true,
     },
   }),
 );
