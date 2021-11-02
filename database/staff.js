@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-export default mongoose.model(
+exports.staff = mongoose.model(
   'Staff',
   new mongoose.Schema({
     name: {

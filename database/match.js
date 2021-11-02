@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-export default mongoose.model(
+exports.match = mongoose.model(
   'Match',
   new mongoose.Schema({
     team1: {

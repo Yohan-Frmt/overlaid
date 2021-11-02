@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
-export default mongoose.model(
+exports.tournament = mongoose.model(
   'Tournament',
   new mongoose.Schema({
     name: {

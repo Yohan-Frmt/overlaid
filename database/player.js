@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-exports.team = mongoose.model(
-  'Team',
+exports.player = mongoose.model(
+  'Player',
   new mongoose.Schema({
     name: {
       type: String,
@@ -13,21 +13,27 @@ exports.team = mongoose.model(
     twitter: {
       type: String,
       trim: true,
-      unique: false,
+      unique: true,
       required: false,
     },
     nationality: {
       type: String,
       trim: true,
-      unique: false,
-      required: true,
+      unique: true,
+      required: false,
       get: ([x, ...y]) => x.toUpperCase() + y.join(''),
     },
-    logo: {
-      type: String,
-      trim: true,
-      unique: false,
-      required: false,
-    },
+    teams: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team',
+      },
+    ],
+    characters: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Character',
+      },
+    ],
   }),
 );

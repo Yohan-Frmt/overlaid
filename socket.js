@@ -1,5 +1,5 @@
-import { Server } from 'socket.io';
-import config from './config/index.js';
+const socketio = require('socket.io');
+const { config } = require('./config');
 
 const getUniqueId = () => {
   const s = () =>
@@ -20,8 +20,8 @@ const fixCors = (hosts) => {
   });
 };
 
-export default (server) => {
-  const io = new Server(server, {
+exports.socket = (server) => {
+  const io = new socketio.Server(server, {
     cors: fixCors(config.ALLOW_HOSTS_LIST),
     transports: ['websocket', 'polling'],
   });

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
 const getDefaultValue = (value, defaultValue) => {
@@ -9,7 +9,7 @@ const getDefaultValue = (value, defaultValue) => {
 const prodHosts = [];
 const devHosts = ['http://localhost:8080', 'http://localhost:4200'];
 
-const config = {
+exports.config = {
   IS_DEV: getDefaultValue(process.env.NODE_DEV, 'development') !== 'production',
   DATABASE_URI: getDefaultValue(
     process.env.DATABASE_URI,
@@ -24,5 +24,3 @@ const config = {
       ? prodHosts
       : devHosts,
 };
-
-export default config;

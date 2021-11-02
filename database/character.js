@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-exports.map = mongoose.model(
-  'Map',
+exports.character = mongoose.model(
+  'Character',
   new mongoose.Schema({
     name: {
       type: String,
