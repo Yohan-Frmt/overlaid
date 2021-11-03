@@ -20,6 +20,17 @@ exports.database = {
   character,
   mongoose,
   initMap: () => {
+    staff.estimatedDocumentCount((err, count) => {
+      if (!err && count === 0) {
+        new staff({
+          name: 'Rybard',
+          twitter: `@Rybard`,
+          pronoun: `He/Him`,
+        }).save((err) =>
+          err ? console.error(err) : console.info('Staff Rybard was added'),
+        );
+      }
+    });
     character.estimatedDocumentCount((err, count) => {
       if (!err && count === 0) {
         new character({
