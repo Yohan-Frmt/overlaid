@@ -19,7 +19,7 @@ exports.staff = mongoose.model(
     pronoun: {
       type: String,
       trim: true,
-      unique: true,
+      unique: false,
       required: false,
     },
   }),
