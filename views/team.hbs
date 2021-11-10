@@ -1,0 +1,214 @@
+<body id="page-top">
+    <div id="wrapper">
+      {{>sidebar}}
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                  <div class='d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search'>
+                    <h2>Team</h2>
+                  </div>
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+              <div class="container-fluid">
+
+                <div class="row">
+
+                  <!-- Area Chart -->
+                  <div class="col-xl-12 col-lg-12">
+                    <div class="card shadow mb-0">
+                      <!-- Card Header - Dropdown -->
+                      <div
+                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Teams</h6>
+                      </div>
+                      <!-- Card Body -->
+                      <div class="card-body">
+                        <div class="chart-area">
+                          <div class="row justify-content-center">
+                            <div id='teams' class="d-flex flex-wrap justify-content-around">
+                              {{#each teams}}
+                                <div id='{{this.name}}' class="card">
+                                  <h5 class="card-header">{{this.name}}</h5>
+                                  <div class="card-body">
+                                    <h5 class="card-title">{{this.twitter}}</h5>
+                                    <p class="card-text">{{this.nationality}}</p>
+                                    <a href='team/{{this.name}}' class="showTeam btn btn-primary">SHOW</a>
+                                    <button class="deleteTeam btn btn-primary">DELETE</button>
+                                  </div>
+                                </div>
+                              {{/each}}
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                              <div class="form-group"><label for="team">Team Name</label><input type="text" class="form-control" id="team" placeholder="Type something"/> </div>
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                              <div class="form-group"><label for="twitter">Team twitter</label><input type="text" class="form-control" id="twitter" placeholder="Type something"/> </div>
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                              <label for='nationality'>Team nationality</label>
+                              <select class="form-select" id='nationality'>
+                                <option selected>Select a nationality</option>
+                                <option value="1">North America</option>
+                                <option value="2">Europe</option>
+                                <option value="3">Brazil</option>
+                                <option value="4">Asia Pacific</option>
+                                <option value="5">Korea</option>
+                                <option value="6">China</option>
+                                <option value="7">LA-S</option>
+                                <option value="8">LA-N</option>
+                                <option value="9">Oceania</option>
+                                <option value="10">MENA</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                              <label for='members'>Team members</label>
+                              <select id='members' class="selectpicker" multiple data-live-search="true">
+                                {{#each players}}
+                                  <option value='{{@index}}'>{{this.name}}</option>
+                                {{/each}}
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-md-6 col-lg-4 col-12">
+                              <div class="form-group files"><label class="my-auto">Logo </label> <input id="teamImage" type="file" class="form-control" /></div>
+                            </div>
+                          </div>
+                          <div class="row justify-content-center">
+                            <div class="col-md-6 col-lg-4 col-12">
+                              <button id='addTeam' type='submit'>Submit</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy;</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <script>
+      document.querySelectorAll('.deleteTeam').forEach(button => {
+        button.addEventListener('click', (ev) => {
+            ev.preventDefault()
+            const name = ev.target.parentNode.parentNode.id
+            const fd = new FormData()
+            fd.append('name', name)
+            fd.append('type', 'team')
+            fetch('team', { method: "DELETE", body: fd })
+              .then(data => data.json())
+              .then(({ status, data }) => {
+                if (!status) return
+                document.getElementById(`${data.name}`).remove()
+              })
+          })
+      })
+      document.querySelector('#addTeam').addEventListener('click', (ev) => {
+        ev.preventDefault()
+        if (ev.target && ev.target.id === 'addTeam') {
+          const [
+            name,
+            twitter,
+            nationality,
+            members,
+            logo
+          ] = [
+            document.querySelector('#team'),
+            document.querySelector('#twitter'),
+            document.querySelector('#nationality'),
+            document.querySelector('#members'),
+            document.querySelector('#teamImage')
+          ]
+          let m = ""
+          for (const option of members.options) {
+            if (option.selected) m += `${option.text},`
+          }
+          const fd = new FormData()
+          fd.append('name', name.value)
+          fd.append('logo', logo.files[0])
+          fd.append('twitter', twitter.value)
+          fd.append('nationality', nationality.options[nationality.selectedIndex].text)
+          fd.append('players', m.slice(0, -1))
+          fd.append('type', 'team')
+          fetch('team', { method: "POST", body: fd })
+            .then(data => data.json())
+            .then(({ status, data }) => {
+              if (!status) return
+              const card = document.createElement('div')
+              card.id = data.name
+              card.classList.add('card')
+              const h5 = document.createElement('h5')
+              h5.classList.add('card-header')
+              h5.id = 'name'
+              h5.textContent = data.name
+              const body = document.createElement('div')
+              body.classList.add('card-body')
+              const h52 = document.createElement('h5')
+              h52.classList.add('card-title')
+              h52.textContent = data.twitter || ''
+              const p = document.createElement('p')
+              p.classList.add('card-text')
+              p.textContent = data.nationality || ''
+              const buttonShow = document.createElement('button')
+              buttonShow.classList.add('showTeam')
+              buttonShow.classList.add('btn')
+              buttonShow.classList.add('btn-primary')
+              buttonShow.textContent = 'SHOW'
+              const buttonDelete = document.createElement('button')
+              buttonDelete.classList.add('deleteTeam')
+              buttonDelete.classList.add('btn')
+              buttonDelete.classList.add('btn-primary')
+              buttonDelete.textContent = 'DELETE'
+
+              const fragment = document.createDocumentFragment()
+              fragment.appendChild(card)
+              card.appendChild(h5)
+              card.appendChild(body)
+              body.appendChild(h52)
+              body.appendChild(p)
+              body.appendChild(buttonShow)
+              body.appendChild(buttonDelete)
+              document.querySelector('#teams').appendChild(fragment)
+            })
+        }
+      })
+    </script>
+</body>

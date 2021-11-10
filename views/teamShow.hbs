@@ -1,0 +1,14 @@
+<body>
+<p>Name: {{team.name}}</p>
+<p>Twitter: {{team.twitter}}</p>
+<p>Nationality: {{team.nationality}}</p>
+<hr>
+<p>Players :</p>
+{{#each team.players}}
+  <p>{{this.name}}</p>
+{{/each}}
+<hr>
+{{#if team.logo}}
+  <img src='{{team.logo}}' alt=''>
+{{/if}}
+</body>
