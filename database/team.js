@@ -29,5 +29,11 @@ exports.team = mongoose.model(
       unique: false,
       required: false,
     },
+    players: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Player',
+      },
+    ],
   }),
 );

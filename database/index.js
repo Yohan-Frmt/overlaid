@@ -6,29 +6,126 @@ const { match } = require('./match');
 const { game } = require('./game');
 const { map } = require('./map');
 const { character } = require('./character');
-const path = require('path');
+const { player } = require('./player');
 
 mongoose.Promise = global.Promise;
 
+const createCharacter = (c) =>
+  character.create(c).then((doc) => {
+    console.info('Create character :\n', doc);
+    return doc;
+  });
+
+const createStaff = (s) =>
+  staff.create(s).then((doc) => {
+    console.info('Create staff :\n', doc);
+    return doc;
+  });
+
+const createMap = (m) =>
+  map.create(m).then((doc) => {
+    console.info('Create map :\n', doc);
+    return doc;
+  });
+
+const createTeam = (t) =>
+  team.create(t).then((doc) => {
+    console.info('Create team :\n', doc);
+    return doc;
+  });
+
+const createPlayer = (p) =>
+  player.create(p).then((doc) => {
+    console.info('Create player :\n', doc);
+    return doc;
+  });
+
+const joinPlayerAndTeam = async (teamId, playerId) => {
+  await team
+    .findByIdAndUpdate(
+      teamId,
+      {
+        $push: {
+          players: playerId,
+        },
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      },
+    )
+    .exec();
+  await player
+    .findByIdAndUpdate(
+      playerId,
+      {
+        $push: {
+          teams: teamId,
+        },
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      },
+    )
+    .exec();
+};
+
 exports.database = {
   staff,
+  createStaff,
   team,
+  createTeam,
+  player,
+  createPlayer,
+  joinPlayerAndTeam,
   tournament,
   match,
   game,
   map,
+  createMap,
   character,
+  createCharacter,
   mongoose,
-  initMap: () => {
-    staff.estimatedDocumentCount((err, count) => {
+  init: () => {
+    team.estimatedDocumentCount(async (err, count) => {
       if (!err && count === 0) {
-        new staff({
+        await createTeam({
+          name: 'Gambit Esports',
+          twitter: `@GambitEsports`,
+          nationality: `Russia`,
+        });
+        await createTeam({
+          name: 'Zer Gaming',
+          twitter: `@ZerGaming`,
+          nationality: `MENA`,
+        });
+      }
+    });
+    player.estimatedDocumentCount(async (err, count) => {
+      if (!err && count === 0) {
+        await createPlayer({
+          name: 'Rybard',
+          twitter: `@Rybard`,
+        }).catch((err) => console.error(err));
+        await createPlayer({
+          name: 'Caky',
+          twitter: `@Pancaake_`,
+        }).catch((err) => console.error(err));
+      }
+    });
+    staff.estimatedDocumentCount(async (err, count) => {
+      if (!err && count === 0) {
+        await createStaff({
           name: 'Rybard',
           twitter: `@Rybard`,
           pronoun: `He/Him`,
-        }).save((err) =>
-          err ? console.error(err) : console.info('Staff Rybard was added'),
-        );
+        });
+        await createStaff({
+          name: 'Caky',
+          twitter: `@Pancaake_`,
+          pronoun: `She/Her`,
+        });
       }
     });
     character.estimatedDocumentCount((err, count) => {

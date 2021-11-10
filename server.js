@@ -17,7 +17,7 @@ database.mongoose
     `${config.DATABASE_URI}?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false`,
   )
   .then(() => {
-    database.initMap();
+    database.init();
     console.log('Connected to Mongo Database');
   })
   .catch((e) => {

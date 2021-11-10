@@ -19,7 +19,7 @@ exports.player = mongoose.model(
     nationality: {
       type: String,
       trim: true,
-      unique: true,
+      unique: false,
       required: false,
       get: ([x, ...y]) => x.toUpperCase() + y.join(''),
     },
