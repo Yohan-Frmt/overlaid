@@ -1,0 +1,16 @@
+<body>
+<p>Name: {{player.name}}</p>
+<p>Twitter: {{player.twitter}}</p>
+<p>Nationality: {{player.nationality}}</p>
+<hr>
+Best characters :
+{{#each player.characters}}
+  <img src='{{this.image}}' alt=''>
+{{/each}}
+<hr>
+<hr>
+Teams :
+{{#each player.teams}}
+  <p>{{this.name}}</p>
+{{/each}}
+<hr>

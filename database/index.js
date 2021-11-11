@@ -40,6 +40,23 @@ const createPlayer = (p) =>
     return doc;
   });
 
+const addCharacterToPlayer = async (playerId, characterId) => {
+  await player
+    .findByIdAndUpdate(
+      playerId,
+      {
+        $push: {
+          characters: characterId,
+        },
+      },
+      {
+        new: true,
+        useFindAndModify: false,
+      },
+    )
+    .exec();
+};
+
 const joinPlayerAndTeam = async (teamId, playerId) => {
   await team
     .findByIdAndUpdate(
@@ -79,6 +96,7 @@ exports.database = {
   player,
   createPlayer,
   joinPlayerAndTeam,
+  addCharacterToPlayer,
   tournament,
   match,
   game,
@@ -107,10 +125,12 @@ exports.database = {
         await createPlayer({
           name: 'Rybard',
           twitter: `@Rybard`,
+          nationality: `Europe`,
         }).catch((err) => console.error(err));
         await createPlayer({
           name: 'Caky',
           twitter: `@Pancaake_`,
+          nationality: `Europe`,
         }).catch((err) => console.error(err));
       }
     });
